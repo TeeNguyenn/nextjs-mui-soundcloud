@@ -5,8 +5,8 @@ import type { Metadata } from 'next'
 import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: "Tee page from layout",
-  description: "Tee like page desc"
+  title: "Upload track",
+  description: "Tee page desc"
 }
 
 const testJSONLD = {

@@ -3,6 +3,14 @@ import { sendRequest } from '@/utils/api'
 import React from 'react'
 import Grid from '@mui/material/Grid';
 import { Container } from '@mui/material';
+import type { Metadata } from 'next'
+
+
+
+export const metadata: Metadata = {
+  title: "Profile | Soundcloud",
+  description: "Profile page"
+}
 
 
 const ProfilePage = async ({ params }: { params: { slug: string } }) => {
@@ -24,7 +32,7 @@ const ProfilePage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <Container sx={{ padding: "40px 0" }}>
-      <Grid container spacing={3}>
+      <Grid container spacing={4}>
         {
           res.data?.result.map(item => (
             <Grid item xs={8} md={6} key={item._id}>

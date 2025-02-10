@@ -4,14 +4,14 @@ import type { Metadata } from 'next'
 import { Container, Divider, Grid, Typography } from '@mui/material'
 import { convertSlugURL, sendRequest } from '@/utils/api'
 import { getServerSession } from "next-auth/next"
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/auth.options'
 
 import Like from '@/components/like/like'
 
 
 
 export const metadata: Metadata = {
-    title: "Tee like page",
+    title: "Hear the tracks you’ve liked: on SoundCloud",
     description: "Tee like page desc"
 }
 
@@ -35,8 +35,7 @@ const LikePage = async () => {
 
     return (
         <Container sx={{ mt: 2 }}>
-            <Typography variant='h6'>Hear the tracks you've liked:</Typography>
-            <Divider sx={{ my: 2 }} />
+            <Typography variant='h6' sx={{ mb: 4 }}>Hear the tracks you've liked:</Typography>
             <Like likes={res.data?.result ?? []} />
         </Container>
     )

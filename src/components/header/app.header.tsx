@@ -10,19 +10,24 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { Avatar, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { fetchDefaultImage } from '@/utils/api';
 import Image from 'next/image';
 import ActiveLink from './active.link';
+import Button from '@mui/material/Button';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuList from '@mui/material/MenuList';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -70,6 +75,32 @@ export default function AppHeader() {
 
     // console.log(session);
 
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef<HTMLButtonElement>(null);
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+
+    const handleClose = (event: Event | React.SyntheticEvent) => {
+        if (
+            anchorRef.current &&
+            anchorRef.current.contains(event.target as HTMLElement)
+        ) {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    function handleListKeyDown(event: React.KeyboardEvent) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            setOpen(false);
+        } else if (event.key === 'Escape') {
+            setOpen(false);
+        }
+    }
 
     const router = useRouter();
 
@@ -77,7 +108,6 @@ export default function AppHeader() {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
 
-    const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -88,38 +118,11 @@ export default function AppHeader() {
         setMobileMoreAnchorEl(null);
     };
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        handleMobileMenuClose();
-    };
 
     const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
-    const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            id={menuId}
-            keepMounted
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            open={isMenuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem >
-                <Link href={`/profile/${session?.user._id}`} style={{
-                    color: "unset",
-                    textDecoration: "unset"
-                }}>Profile</Link>
-            </MenuItem>
-            <MenuItem onClick={() => {
-                handleMenuClose()
-                signOut();
-            }} >Log out</MenuItem>
-        </Menu>
-    );
 
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
@@ -216,9 +219,10 @@ export default function AppHeader() {
                                 padding: "5px",
 
                                 "&.active": {
-                                    background: "#3b4a59",
-                                    color: "#cefaff",
-                                    borderRadius: "5px",
+                                    // background: "#3b4a59",
+                                    // color: "#cefaff",
+                                    // borderRadius: "5px",
+                                    color: "rgb(255, 85, 0)"
                                 }
                             }
                         }}>
@@ -227,15 +231,67 @@ export default function AppHeader() {
                                     <ActiveLink href={`/playlist/${session.user._id}`}>Playlists</ActiveLink>
                                     <ActiveLink href={"/like"}>Likes</ActiveLink>
                                     <ActiveLink href={"/track/upload"}>Upload</ActiveLink>
-                                    <Image
-                                        src={fetchDefaultImage(session.user.type)}
-                                        alt=""
-                                        width={40}
-                                        height={40}
-                                        style={{ borderRadius: "50%" }}
-                                        onClick={handleProfileMenuOpen}
-                                    />
-                                    {/* <Avatar onClick={handleProfileMenuOpen}>T</Avatar> */}
+
+                                    <Button
+                                        ref={anchorRef}
+                                        id="composition-button"
+                                        aria-controls={open ? 'composition-menu' : undefined}
+                                        aria-expanded={open ? 'true' : undefined}
+                                        aria-haspopup="true"
+                                        onClick={handleToggle}
+                                    >
+                                        <Image
+                                            src={fetchDefaultImage(session.user.type)}
+                                            alt=""
+                                            width={40}
+                                            height={40}
+                                            style={{ borderRadius: "50%" }}
+                                        />
+                                    </Button>
+                                    <Popper
+                                        open={open}
+                                        anchorEl={anchorRef.current}
+                                        role={undefined}
+                                        placement="bottom-start"
+                                        transition
+                                        disablePortal
+                                        sx={{ zIndex: 10 }}
+
+                                    >
+                                        {({ TransitionProps, placement }) => (
+                                            <Grow
+                                                {...TransitionProps}
+                                                style={{
+                                                    transformOrigin:
+                                                        placement === 'bottom-start' ? 'left top' : 'left bottom',
+                                                }}
+                                            >
+                                                <Paper>
+                                                    <ClickAwayListener onClickAway={handleClose}>
+                                                        <MenuList
+                                                            autoFocusItem={open}
+                                                            id="composition-menu"
+                                                            aria-labelledby="composition-button"
+                                                            onKeyDown={handleListKeyDown}
+                                                        >
+                                                            <MenuItem onClick={handleClose}>
+                                                                <Link href={`/profile/${session?.user._id}`} style={{
+                                                                    color: "unset",
+                                                                    textDecoration: "unset"
+                                                                }}>Profile</Link>
+                                                            </MenuItem>
+                                                            <MenuItem onClick={async (e) => {
+                                                                handleClose(e)
+                                                                // signOut();
+                                                                const data = await signOut({ redirect: false, callbackUrl: "/auth/signin" })
+                                                                router.push("/auth/signin")
+                                                            }} >Log out</MenuItem>
+                                                        </MenuList>
+                                                    </ClickAwayListener>
+                                                </Paper>
+                                            </Grow>
+                                        )}
+                                    </Popper>
                                 </>
                                     :
                                     <Link
@@ -262,7 +318,7 @@ export default function AppHeader() {
                 </Container>
             </AppBar>
             {renderMobileMenu}
-            {renderMenu}
+
         </Box>
     );
 }

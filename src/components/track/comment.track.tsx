@@ -40,6 +40,17 @@ const CommentTrack = (props: CommentTrackProps) => {
 
         if (res.data) {
             setYourComment("")
+
+            // Revalidate for clear cache
+            await sendRequest<IBackendRes<any>>({
+                url: `/api/revalidate`,
+                method: "POST",
+                queryParams: {
+                    tag: "track-by-id",
+                    secret: "hiteedev"
+                }
+            })
+
             router.refresh();   //same f5
         }
 

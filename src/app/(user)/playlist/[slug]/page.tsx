@@ -11,14 +11,14 @@ import { Container, Divider, IconButton } from '@mui/material';
 import NewPlaylist from '@/components/playlist/new.playlist';
 import NewTrackInPlaylist from '@/components/playlist/new.track.in.playlist';
 import { getServerSession } from "next-auth/next"
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/auth.options';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TrackItem from '@/components/playlist/track.item';
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Playlist bạn đã tạo',
-  description: 'miêu tả thôi mà',
+  title: 'Hear your own playlists',
+  description: 'Playlist description',
 }
 
 
@@ -51,6 +51,8 @@ const PlaylistPage = async ({ params }: { params: { slug: string } }) => {
       next: { tags: ['all-tracks'] }
     }
   })
+
+
 
   return (
     <Container sx={{ mt: 3, padding: "20px", backgroundColor: "aliceblue" }}>

@@ -3,7 +3,7 @@ import MainSlider from '@/components/main/main.slider';
 import { Container } from '@mui/material';
 import { sendRequest } from '@/utils/api';
 import { getServerSession } from "next-auth/next"
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/auth.options';
 
 export default async function HomePage() {
 
@@ -42,9 +42,9 @@ export default async function HomePage() {
 
   return (
     <Container >
-      <MainSlider title='Top Chill' data={chills.data ?? []} />
-      <MainSlider title='Top Workout' data={workouts.data ?? []} />
-      <MainSlider title='Top Party' data={parties.data ?? []} />
+      <MainSlider title='Chill' data={chills.data ?? []} />
+      <MainSlider title='Workout' data={workouts.data ?? []} />
+      <MainSlider title='Party' data={parties.data ?? []} />
     </Container>
   );
 }

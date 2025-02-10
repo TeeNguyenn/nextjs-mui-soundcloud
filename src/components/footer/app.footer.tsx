@@ -5,6 +5,8 @@ import React, { useEffect, useRef } from 'react'
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { useTrackContext } from '@/lib/track.wrapper';
+import Link from 'next/link';
+import { convertSlugURL } from '@/utils/api';
 
 const AppFooter = () => {
   const playerRef = useRef(null);
@@ -56,10 +58,17 @@ const AppFooter = () => {
                 flexDirection: "column",
                 alignItems: "start",
                 justifyContent: "center",
-                minWidth: 100
+                minWidth: 100,
+
+                ".track-name:hover": {
+                  color: "#000 !important"
+                },
               }}>
-                <div style={{ color: "#ccc", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{currentTrack.title}</div>
-                <div style={{ color: "black", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{currentTrack.description}</div>
+                <div style={{ color: "#ccc", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{currentTrack?.uploader?.name ?? "Tee"}</div>
+                <Link href={`/track/${convertSlugURL(currentTrack.title)}-${currentTrack._id}.html?audio=${currentTrack.trackUrl}`}
+                  style={{ color: "inherit", textDecoration: "none" }}>
+                  <div className='track-name' style={{ color: "#333", overflow: "hidden", whiteSpace: 'nowrap', textOverflow: "ellipsis" }}>{currentTrack.title}</div>
+                </Link>
               </Box>
             </Container>
           </AppBar>

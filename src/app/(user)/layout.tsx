@@ -1,12 +1,11 @@
 import AppFooter from '@/components/footer/app.footer';
 import AppHeader from '@/components/header/app.header';
-
-import type { Metadata } from 'next'
 import Script from 'next/script';
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Tee page from layout",
-  description: "Tee like page desc"
+  title: "Discover the top streamed music and songs online on Soundcloud",
+  description: "Home page"
 }
 
 const testJSONLD = {

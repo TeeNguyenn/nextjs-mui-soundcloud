@@ -13,7 +13,7 @@ const Like = (props: LikeProps) => {
     const { likes } = props;
 
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
             {
                 likes.map(item => (
                     <Grid item xs={6} md={3} key={item._id} >
@@ -30,6 +30,7 @@ const Like = (props: LikeProps) => {
                         <Link href={`/track/${convertSlugURL(item.title)}-${item._id}.html?audio=${item.trackUrl}`} style={{ color: '#000', textDecoration: 'none' }}>
                             {item.title}
                         </Link>
+                        <div style={{ color: "#999", fontSize: 14 }}>{item?.uploader?.name ?? "Tee"}</div>
                     </Grid>
                 ))
             }

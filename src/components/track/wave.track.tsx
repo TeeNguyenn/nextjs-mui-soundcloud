@@ -295,6 +295,7 @@ const WaveTrack = (props: WaveTrackProps) => {
                         alt=""
                         width={250}
                         height={250}
+                        style={{ objectFit: "cover" }}
                     >
                     </Image> :
                         <div style={{

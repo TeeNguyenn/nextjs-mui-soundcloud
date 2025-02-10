@@ -70,7 +70,7 @@ const CardTrack = (props: ICardTrack) => {
             </Box>
             <CardMedia
                 component="img"
-                sx={{ width: 151, borderRadius: "6px" }}
+                sx={{ width: 150, height: 200, borderRadius: "6px" }}
                 image={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${data.imgUrl}`}
                 alt="Live from space album cover"
             />

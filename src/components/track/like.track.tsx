@@ -6,6 +6,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useSession } from 'next-auth/react';
 import { sendRequest } from '@/utils/api';
 import { useRouter } from 'next/navigation';
+import { handleLikeTrackAction } from '@/utils/actions';
 
 interface LikeTrackProps {
     track: ITrackTop | null;
@@ -44,45 +45,16 @@ const LikeTrack = (props: LikeTrackProps) => {
     }, [session])
 
     const handleClick = async () => {
-        const res = await sendRequest<IBackendRes<IModelPaginate<ITrackLike>>>({
-            url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/likes`,
-            method: "POST",
-            body: {
-                track: track?._id,
-                quantity: likedTracks.some(item => item._id === track?._id) ? -1 : 1,
-            },
-            headers: {
-                Authorization: `Bearer ${session?.access_token}`,
-            },
-        })
 
-        if (res.data) {
 
-            // Revalidate for clear cache
+        const id = track?._id;
+        const quantity = likedTracks.some(item => item._id === track?._id) ? -1 : 1
 
-            await Promise.all([
-                sendRequest<IBackendRes<any>>({
-                    url: `/api/revalidate`,
-                    method: "POST",
-                    queryParams: {
-                        tag: "track-by-id",
-                        secret: "hiteedev"
-                    }
-                }),
+        await handleLikeTrackAction(id, quantity)
 
-                sendRequest<IBackendRes<any>>({
-                    url: `/api/revalidate`,
-                    method: "POST",
-                    queryParams: {
-                        tag: "liked-by-user",
-                        secret: "hiteedev"
-                    }
-                })
-            ])
+        fetchData();
+        // router.refresh();
 
-            fetchData();
-            router.refresh();
-        }
     };
 
     return (

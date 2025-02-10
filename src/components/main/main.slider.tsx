@@ -28,17 +28,11 @@ const MainSlider = (props: IMainSlider) => {
                 onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    right: 15,
-                    top: "25%",
+                    right: -13,
+                    top: "30%",
                     zIndex: 2,
                     minWidth: 30,
                     width: 35,
-                    transform: "translateY(-50%)",
-
-
-                    // ":hover": {
-                    //     backgroundColor: '#ddd'
-                    // }
                 }}
             >
                 <ChevronRightIcon />
@@ -52,17 +46,11 @@ const MainSlider = (props: IMainSlider) => {
             <Button color='inherit' variant="contained" onClick={props.onClick}
                 sx={{
                     position: "absolute",
-                    top: "25%",
+                    top: "30%",
+                    left: -10,
                     zIndex: 2,
                     minWidth: 30,
                     width: 35,
-                    transform: "translateY(-50%)",
-
-
-                    // ":hover": {
-                    //     backgroundColor: '#ddd'
-                    // }
-
                 }}
             >
                 <ChevronLeftIcon />
@@ -78,6 +66,7 @@ const MainSlider = (props: IMainSlider) => {
         slidesToScroll: 1,
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
+        draggable: false,
         responsive: [
             {
                 breakpoint: 1024,
@@ -111,15 +100,18 @@ const MainSlider = (props: IMainSlider) => {
         <Box
             sx={{
                 margin: "0 50px",
+                ".slick-list": {
+                    margin: "0 -10px"
+                },
+
                 ".track": {
                     padding: "0 10px",
-
-                    img: {
-                        width: '90%',
-                        height: 200,
-                        objectFit: 'cover'
-                    }
                 },
+
+                ".track-name:hover": {
+                    color: "#000 !important"
+                },
+
                 "h3": {
                     border: "1px solid #ccc",
                     padding: "20px",
@@ -135,29 +127,33 @@ const MainSlider = (props: IMainSlider) => {
                         <div className="track" key={track._id}>
                             <div style={{
                                 position: "relative",
-                                height: "150px",
-                                width: "100%"
+                                // height: "150px",
+                                width: "100%",
+                                paddingTop: "100%"
                             }}
                             >
                                 <Image
                                     alt="eric image"
                                     src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`}
-                                    // width={500}
-                                    // height={500}
                                     fill
                                     style={{
-                                        objectFit: 'contain',
+                                        objectFit: 'cover',
+                                        position: 'absolute',
+                                        inset: "0"
                                     }}
                                 />
                             </div>
-                            <Link href={`/track/${convertSlugURL(track.title)}-${track._id}.html?audio=${track.trackUrl}`}><h4>{track.title}</h4></Link>
-                            <h5>{track.description}</h5>
+                            <Link href={`/track/${convertSlugURL(track.title)}-${track._id}.html?audio=${track.trackUrl}`}
+                                style={{ color: "inherit", textDecoration: "none" }}>
+                                <div className='track-name' style={{ color: "#333", margin: "12px 0", overflow: "hidden", whiteSpace: 'nowrap', textOverflow: "ellipsis" }}>{track.title}</div>
+                            </Link>
+                            <div style={{ color: "#999", fontSize: 14 }}>{track.description}</div>
                         </div>
 
                     ))
                 }
             </Slider>
-            <Divider />
+            <Divider sx={{ marginTop: "24px" }} />
         </Box>
     );
 }
